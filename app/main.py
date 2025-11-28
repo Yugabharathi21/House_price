@@ -76,7 +76,7 @@ def predict_and_log(MedInc, HouseAge, AveRooms, AveBedrms, Population, AveOccup,
     return price_fmt, fig_bar, fig_map, pd.DataFrame(history)
 
 # Modern UI Layout with Blocks
-with gr.Blocks(theme=gr.themes.Soft(), title="California House Price Predictor") as demo:
+with gr.Blocks(title="California House Price Predictor") as demo:
     gr.Markdown("""
     # 🏡 California House Price Predictor
     Adjust the sliders to estimate house prices. High-value properties (>$400k) are flagged in the history.
