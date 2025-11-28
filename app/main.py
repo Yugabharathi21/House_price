@@ -23,23 +23,25 @@ def predict(input: Input = Input()):
 def gradio_predict(MedInc, HouseAge, AveRooms, AveBedrms, Population, AveOccup, Latitude, Longitude):
     data = [MedInc, HouseAge, AveRooms, AveBedrms, Population, AveOccup, Latitude, Longitude]
     pred = model.predict([data])
-    return pred[0]
+    # Convert to actual dollars (target is in $100,000s)
+    price = pred[0] * 100000
+    return f"${price:,.2f}"
 
 iface = gr.Interface(
     fn=gradio_predict,
     inputs=[
-        gr.Number(label="Median Income", value=8.3252),
-        gr.Number(label="House Age", value=41.0),
-        gr.Number(label="Average Rooms", value=6.98),
-        gr.Number(label="Average Bedrooms", value=1.02),
-        gr.Number(label="Population", value=322),
-        gr.Number(label="Average Occupancy", value=2.55),
-        gr.Number(label="Latitude", value=37.88),
-        gr.Number(label="Longitude", value=-122.23)
+        gr.Slider(minimum=0, maximum=15, step=0.1, label="Median Income (Tens of $1000s)", value=8.3),
+        gr.Slider(minimum=1, maximum=52, step=1, label="House Age (Years)", value=41),
+        gr.Slider(minimum=1, maximum=20, step=0.1, label="Average Rooms", value=6.9),
+        gr.Slider(minimum=0, maximum=10, step=0.1, label="Average Bedrooms", value=1.0),
+        gr.Slider(minimum=1, maximum=5000, step=10, label="Population", value=322),
+        gr.Slider(minimum=1, maximum=10, step=0.1, label="Average Occupancy", value=2.5),
+        gr.Slider(minimum=32, maximum=42, step=0.1, label="Latitude", value=37.88),
+        gr.Slider(minimum=-125, maximum=-114, step=0.1, label="Longitude", value=-122.23)
     ],
-    outputs="number",
-    title="California House Price Predictor",
-    description="Enter the housing details to predict the price."
+    outputs=gr.Textbox(label="Predicted House Price"),
+    title="🏡 California House Price Predictor",
+    description="Adjust the sliders below to estimate the house price."
 )
 
 # Mount Gradio app to FastAPI
