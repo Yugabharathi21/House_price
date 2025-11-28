@@ -21,6 +21,7 @@ def predict(input: Input = Input()):
 
 import pandas as pd
 from datetime import datetime
+import plotly.graph_objects as go
 
 # Global history
 history = []
